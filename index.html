@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>lightmoney.ai — Shine a Light</title>
+<meta name="description" content="podCOIN uses blockchain to track volunteer hours promoting policies, candidates, and legislation. Transparent civic engagement, on the ledger." />
+<link rel="icon" type="image/png" href="logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #2d3239;
+    --ink-soft: #3b4148;
+    --paper: #f5efe0;
+    --paper-warm: #ede4cf;
+    --sun: #f5c429;
+    --sun-deep: #e6a818;
+    --dolphin: #2a8f6b;
+    --dolphin-deep: #1f6b50;
+    --rule: rgba(245, 196, 41, 0.25);
+    --shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 20px 40px -20px rgba(0,0,0,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 800px 500px at 20% -10%, rgba(245, 196, 41, 0.12), transparent 60%),
+      radial-gradient(ellipse 600px 400px at 90% 10%, rgba(42, 143, 107, 0.08), transparent 60%);
+  }
+
+  /* grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ───────── HEADER ───────── */
+  header {
+    padding: 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(245, 196, 41, 0.15);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+
+  .brand-text {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #00c438;
+  }
+
+  .brand-text span { color: #00c438; }
+
+  nav {
+    display: flex;
+    gap: 28px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  nav a {
+    color: var(--paper);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  nav a:hover { opacity: 1; color: var(--sun); }
+
+  /* ───────── HERO ───────── */
+  .hero {
+    padding: 100px 0 80px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--sun);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--sun);
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: clamp(56px, 8vw, 112px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 32px;
+  }
+
+  h1 { color: #00c438; }
+
+  h1 .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: #00c438;
+  }
+
+  .lede {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    line-height: 1.55;
+    color: rgba(245, 239, 224, 0.85);
+    max-width: 480px;
+    margin-bottom: 36px;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--sun);
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -8px rgba(245, 196, 41, 0.5);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--paper);
+    border: 1px solid rgba(245, 239, 224, 0.3);
+  }
+
+  .btn-ghost:hover { border-color: var(--sun); color: var(--sun); }
+
+  /* hero visual */
+  .hero-visual {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 420px;
+    margin-left: auto;
+  }
+
+  .hero-visual .glow {
+    position: absolute;
+    inset: -40px;
+    background: radial-gradient(circle, rgba(245, 196, 41, 0.4), transparent 60%);
+    filter: blur(40px);
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.05); }
+  }
+
+  .hero-visual img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+  }
+
+  /* ───────── EXPLAINER ───────── */
+  .explainer {
+    padding: 80px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .explainer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+
+  .step {
+    position: relative;
+  }
+
+  .step-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 64px;
+    font-weight: 400;
+    color: var(--sun);
+    line-height: 1;
+    margin-bottom: 20px;
+    opacity: 0.9;
+  }
+
+  .step h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    color: var(--paper);
+  }
+
+  .step p {
+    font-size: 14px;
+    color: rgba(245, 239, 224, 0.7);
+    line-height: 1.65;
+  }
+
+  /* ───────── POLICIES TABLE ───────── */
+  .policies {
+    padding: 100px 0;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .section-head h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .section-head h2 .italic {
+    font-style: italic;
+    color: var(--sun);
+    font-weight: 400;
+  }
+
+  .section-head p {
+    max-width: 380px;
+    font-size: 14px;
+    color: rgba(245, 239, 224, 0.7);
+  }
+
+  .table-wrap {
+    background: rgba(245, 239, 224, 0.03);
+    border: 1px solid rgba(245, 196, 41, 0.15);
+    border-radius: 4px;
+    overflow: hidden;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 720px;
+  }
+
+  thead {
+    background: rgba(245, 196, 41, 0.08);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  th {
+    text-align: left;
+    padding: 18px 20px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--sun);
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+
+  th:hover { background: rgba(245, 196, 41, 0.05); }
+
+  th .sort-arrow {
+    display: inline-block;
+    margin-left: 6px;
+    opacity: 0.4;
+    font-size: 10px;
+    transition: opacity 0.2s;
+  }
+
+  th.sorted .sort-arrow { opacity: 1; }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(245, 196, 41, 0.08);
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(245, 196, 41, 0.04); }
+
+  td {
+    padding: 18px 20px;
+    vertical-align: middle;
+  }
+
+  .policy-graphic {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    background: rgba(245, 196, 41, 0.12);
+    border: 1px solid rgba(245, 196, 41, 0.25);
+  }
+
+  .policy-label {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--paper);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 4px;
+    transition: color 0.15s;
+  }
+
+  .policy-label:hover { color: var(--sun); }
+
+  .policy-tagline {
+    font-size: 12px;
+    color: var(--sun);
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+
+  .policy-desc {
+    font-size: 13px;
+    color: rgba(245, 239, 224, 0.65);
+    line-height: 1.5;
+    max-width: 380px;
+  }
+
+  .vote-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(42, 143, 107, 0.15);
+    border: 1px solid rgba(42, 143, 107, 0.35);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #5fc499;
+  }
+
+  .date-cell {
+    font-size: 12px;
+    color: rgba(245, 239, 224, 0.55);
+    white-space: nowrap;
+  }
+
+  /* ───────── FOOTER ───────── */
+  footer {
+    padding: 60px 0 40px;
+    border-top: 1px solid var(--rule);
+    margin-top: 40px;
+  }
+
+  .footer-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-tag {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--sun);
+  }
+
+  .footer-meta {
+    font-size: 12px;
+    color: rgba(245, 239, 224, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  /* ───────── RESPONSIVE ───────── */
+  @media (max-width: 860px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 60px 0;
+      gap: 40px;
+    }
+    .hero-visual { max-width: 280px; margin: 0 auto; }
+    .explainer-grid { grid-template-columns: 1fr; gap: 40px; }
+    nav { display: none; }
+    .container { padding: 0 20px; }
+  }
+
+  /* entry animations */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.25s; }
+  .fade-up:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ───── HEADER ───── -->
+  <header>
+    <a href="/" class="brand">
+      <img src="logo.png" alt="lightmoney.ai" />
+      <span class="brand-text">lightmoney<span>.ai</span></span>
+    </a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#policies">Policies</a>
+      <a href="#join">Join</a>
+    </nav>
+  </header>
+
+  <!-- ───── HERO ───── -->
+  <section class="hero">
+    <div>
+      <div class="eyebrow fade-up">Transparent civic engagement</div>
+      <h1 class="fade-up">Shine<br/>a <span class="italic">Light.</span></h1>
+      <p class="lede fade-up">
+        podCOIN puts volunteer hours on the blockchain — a public ledger that tracks who works for which policies, which candidates back them, and which proposed legislation moves them forward.
+      </p>
+      <div class="cta-row fade-up">
+        <a href="#policies" class="btn btn-primary">See the policies →</a>
+        <a href="#how" class="btn btn-ghost">How it works</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="glow"></div>
+      <img src="logo.png" alt="" />
+    </div>
+  </section>
+
+  <!-- ───── EXPLAINER ───── -->
+  <section class="explainer" id="how">
+    <div class="explainer-grid">
+      <div class="step">
+        <div class="step-num">i.</div>
+        <h3>Volunteer hours, on-chain</h3>
+        <p>Every hour spent promoting a policy gets recorded to the blockchain ledger. Verifiable. Permanent. Yours.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">ii.</div>
+        <h3>Policies, not parties</h3>
+        <p>Policies are the unit of work. Each one carries its own page, supporters, and the candidates and legislation that align with it.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">iii.</div>
+        <h3>Public, sortable, accountable</h3>
+        <p>Anyone can see which policies have momentum, which candidates back them, and how the public is voting in real time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── POLICIES TABLE ───── -->
+  <section class="policies" id="policies">
+    <div class="section-head">
+      <h2>Active <span class="italic">policies</span></h2>
+      <p>Click any column header to sort. Each policy links to its candidates, legislation, and ledger of supporting hours.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table id="policies-table">
+        <thead>
+          <tr>
+            <th data-sort="label" data-type="string">Policy <span class="sort-arrow">↕</span></th>
+            <th data-sort="votes" data-type="number">Public votes <span class="sort-arrow">↕</span></th>
+            <th data-sort="date" data-type="date">Posted <span class="sort-arrow">↕</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-label="Clean Energy Transition" data-votes="14820" data-date="2026-04-12">
+            <td>
+              <div style="display:flex;gap:14px;align-items:flex-start;">
+                <div class="policy-graphic">⚡</div>
+                <div>
+                  <a href="#" class="policy-label">Clean Energy Transition</a>
+                  <div class="policy-tagline">Power the grid, not the lobby.</div>
+                  <div class="policy-desc">Accelerate the shift to wind, solar, and storage with public investment and grid modernization.</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="vote-pill">▲ 14,820</span></td>
+            <td class="date-cell">Apr 12, 2026</td>
+          </tr>
+          <tr data-label="Housing First" data-votes="9217" data-date="2026-03-28">
+            <td>
+              <div style="display:flex;gap:14px;align-items:flex-start;">
+                <div class="policy-graphic">🏠</div>
+                <div>
+                  <a href="#" class="policy-label">Housing First</a>
+                  <div class="policy-tagline">A roof is a right.</div>
+                  <div class="policy-desc">Zoning reform and direct construction subsidies to address the housing shortage at its root.</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="vote-pill">▲ 9,217</span></td>
+            <td class="date-cell">Mar 28, 2026</td>
+          </tr>
+          <tr data-label="Money in Politics Reform" data-votes="22104" data-date="2026-02-14">
+            <td>
+              <div style="display:flex;gap:14px;align-items:flex-start;">
+                <div class="policy-graphic">🔆</div>
+                <div>
+                  <a href="#" class="policy-label">Money in Politics Reform</a>
+                  <div class="policy-tagline">Disclose every dollar.</div>
+                  <div class="policy-desc">Mandate full, real-time disclosure of campaign contributions and overturn dark money loopholes.</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="vote-pill">▲ 22,104</span></td>
+            <td class="date-cell">Feb 14, 2026</td>
+          </tr>
+          <tr data-label="Ocean Protection Act" data-votes="6543" data-date="2026-04-05">
+            <td>
+              <div style="display:flex;gap:14px;align-items:flex-start;">
+                <div class="policy-graphic">🌊</div>
+                <div>
+                  <a href="#" class="policy-label">Ocean Protection Act</a>
+                  <div class="policy-tagline">For the dolphins, and the rest of us.</div>
+                  <div class="policy-desc">Expand marine protected areas and enforce stricter limits on industrial fishing and plastic waste.</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="vote-pill">▲ 6,543</span></td>
+            <td class="date-cell">Apr 5, 2026</td>
+          </tr>
+          <tr data-label="Universal Civic Education" data-votes="4128" data-date="2026-01-22">
+            <td>
+              <div style="display:flex;gap:14px;align-items:flex-start;">
+                <div class="policy-graphic">📚</div>
+                <div>
+                  <a href="#" class="policy-label">Universal Civic Education</a>
+                  <div class="policy-tagline">Informed voters, by design.</div>
+                  <div class="policy-desc">Restore civics as a graduation requirement with curriculum on media literacy and democratic process.</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="vote-pill">▲ 4,128</span></td>
+            <td class="date-cell">Jan 22, 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── FOOTER ───── -->
+  <footer id="join">
+    <div class="footer-grid">
+      <div class="footer-tag">Shine a light. — lightmoney.ai</div>
+      <div class="footer-meta">© 2026 · Powered by podCOIN</div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Sortable table
+  (function() {
+    const table = document.getElementById('policies-table');
+    if (!table) return;
+    const tbody = table.querySelector('tbody');
+    const headers = table.querySelectorAll('th[data-sort]');
+    let currentSort = { key: null, dir: 'asc' };
+
+    headers.forEach(h => {
+      h.addEventListener('click', () => {
+        const key = h.dataset.sort;
+        const type = h.dataset.type;
+        const dir = (currentSort.key === key && currentSort.dir === 'asc') ? 'desc' : 'asc';
+        currentSort = { key, dir };
+
+        headers.forEach(x => {
+          x.classList.remove('sorted');
+          x.querySelector('.sort-arrow').textContent = '↕';
+        });
+        h.classList.add('sorted');
+        h.querySelector('.sort-arrow').textContent = dir === 'asc' ? '↑' : '↓';
+
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((a, b) => {
+          let av = a.dataset[key];
+          let bv = b.dataset[key];
+          if (type === 'number') { av = +av; bv = +bv; }
+          else if (type === 'date') { av = new Date(av); bv = new Date(bv); }
+          else { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+          if (av < bv) return dir === 'asc' ? -1 : 1;
+          if (av > bv) return dir === 'asc' ? 1 : -1;
+          return 0;
+        });
+        rows.forEach(r => tbody.appendChild(r));
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
